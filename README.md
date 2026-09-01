@@ -68,3 +68,11 @@ worth more than the few kilobytes minifying it would save.
 Needs `uv`, `python3`, `just`, and Chrome or Chromium for the PDF. Nothing else,
 and no sibling repository: a public project that cannot be built by whoever
 finds it is not really published.
+
+## Licence
+
+The tooling is Apache-2.0; see LICENSE. The page builder under
+`src/resume_markdown/` is derived from mikepqr/resume-markdown and stays MIT
+under his notice, which sits with his code. The resume itself -- `resume.md`,
+`resume.pdf`, `index.html` -- is all rights reserved: published to be read,
+not licensed for reuse. NOTICE draws the line file by file.
