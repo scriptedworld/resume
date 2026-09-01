@@ -1,0 +1,718 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Jeff Wood</title>
+<style>
+/* Tokyo Night, cyberpunk cut, for the public-facing resume.
+ *
+ * The neon is on the furniture: section headers sit in a faint glow pool with
+ * a lit edge, the name carries a soft chromatic split, the card has a hot top
+ * seam. Body text is never glowed, because glowing paragraphs are unreadable
+ * and this is still a resume someone has to skim in ten seconds.
+ *
+ * Screen is dark. Print and PDF flip to ink-on-paper further down, and that
+ * block strips every glow, gradient and shadow. Delete it if you want the PDF
+ * dark too.
+ *
+ * Palette is the canonical Tokyo Night set.
+ */
+
+:root {
+    --bg:        #1a1b26;
+    --bg-card:   #1f2335;
+    --bg-inset:  #16161e;
+    --fg:        #c0caf5;
+    --fg-dim:    #a9b1d6;
+    --muted:     #565f89;
+    --blue:      #7aa2f7;
+    --cyan:      #7dcfff;
+    --purple:    #bb9af7;
+    --green:     #9ece6a;
+    --orange:    #ff9e64;
+    --yellow:    #e0af68;
+    --red:       #f7768e;
+    --line:      #2f334d;
+
+    /* Focus falloff. Mostly colour, with a light opacity change under it:
+     * a big opacity drop reads as the page being broken rather than as one
+     * thing being read. Raise --recede toward 1 to soften further. */
+    --focus-fg:  #e4ebff;
+    --recede-fg: #b3bce4;
+    --recede:    0.94;
+    /* how much the unit being read grows. Transform, not font-size: font-size
+     * reflows and shoves everything below it down the page. */
+    --focus-scale: 1.018;
+
+    /* the load-in chase: when it starts, and the gap between units */
+    --lead: 240ms;
+    --step: 125ms;
+
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: "JetBrainsMono Nerd Font", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+body {
+    background:
+        radial-gradient(900px 420px at 50% -8%, rgba(122, 162, 247, 0.10), transparent 70%),
+        radial-gradient(700px 400px at 100% 100%, rgba(187, 154, 247, 0.07), transparent 70%),
+        var(--bg);
+    background-attachment: fixed;
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+    padding: 48px 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+#resume {
+    position: relative;
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 56px 64px 64px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow:
+        0 0 0 1px rgba(122, 162, 247, 0.06),
+        0 0 90px rgba(122, 162, 247, 0.05),
+        0 18px 60px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+}
+
+/* hot seam across the top of the card */
+#resume::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--purple) 22%,
+        var(--cyan) 50%,
+        var(--blue) 78%,
+        transparent
+    );
+    opacity: 0.85;
+    box-shadow: 0 0 14px rgba(125, 207, 255, 0.55);
+}
+
+/* ---- name and contact ---------------------------------------------- */
+
+h1 {
+    font-family: var(--mono);
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
+    padding: 0 0 4px 0;
+    text-align: center;
+    /* faint chromatic split, then a wash of blue */
+    text-shadow:
+        0.6px 0 0 rgba(247, 118, 142, 0.32),
+       -0.6px 0 0 rgba(125, 207, 255, 0.32),
+        0 0 22px rgba(122, 162, 247, 0.40);
+}
+
+h1 + p {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    margin: 0 0 8px 0;
+    padding: 0 0 28px 0;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(125, 207, 255, 0.16);
+}
+
+h1 + p a {
+    color: var(--cyan);
+    text-shadow: 0 0 12px rgba(125, 207, 255, 0.45);
+}
+
+/* ---- sections: the glow pool ---------------------------------------- */
+
+h2 {
+    position: relative;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin: 40px -14px 0 -14px;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--line);
+    /* the faint pool, brightest at the left and gone by two-thirds across */
+    background: linear-gradient(
+        100deg,
+        rgba(187, 154, 247, 0.16) 0%,
+        rgba(122, 162, 247, 0.09) 30%,
+        rgba(125, 207, 255, 0.03) 52%,
+        transparent 72%
+    );
+    box-shadow:
+        0 1px 0 rgba(187, 154, 247, 0.40),
+        0 10px 26px -14px rgba(187, 154, 247, 0.65);
+    text-shadow: 0 0 16px rgba(187, 154, 247, 0.55);
+    transition: background 0.22s ease, box-shadow 0.22s ease;
+}
+
+h2 + p {
+    margin-top: 18px;
+}
+
+/* ---- the caret ------------------------------------------------------ */
+
+/* One caret, two homes. It rests after the name and moves to the heading of
+ * whichever section the pointer is in. Section headings only: a caret on every
+ * position title turns a chase into a twitch. Sized in em so it matches the
+ * heading it sits after, and always present at opacity 0 so nothing reflows
+ * when it moves. */
+
+h1::after,
+h2::after {
+    content: "";
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 0.3em;
+    vertical-align: -0.13em;
+    background: var(--cyan);
+    box-shadow: 0 0 12px rgba(125, 207, 255, 0.85);
+    opacity: 0;
+}
+
+/* The caret marks the smallest thing the pointer is inside: a position if
+ * there is one, else the section, else the name. Exactly one is ever lit. */
+
+h1::after {
+    animation: caret 1.05s steps(1, end) infinite;
+}
+
+/* pointer is inside a section: the name gives the caret up */
+#resume:has(section:hover) h1::after {
+    animation: none;
+    opacity: 0;
+}
+
+section:hover > h2::after {
+    animation: caret 1.05s steps(1, end) infinite;
+}
+
+@keyframes caret {
+    0%, 48%   { opacity: 1; }
+    52%, 100% { opacity: 0; }
+}
+
+/* ---- the live unit --------------------------------------------------- */
+
+section,
+article {
+    transition: color 0.22s ease, opacity 0.22s ease, transform 0.22s ease;
+    /* grows to the right off the text column rather than out of both margins */
+    transform-origin: left center;
+}
+
+/* Body text lifts on the unit being read. A section holding positions is too
+ * coarse to light up whole -- EXPERIENCE is one section and six jobs -- so
+ * there the position is the unit. A section with no positions in it is short
+ * enough to be one. Headings, labels and links keep their own colours. */
+
+/* The unit being read: a position where the section has them, the whole
+ * section where it does not. The builder classes each section, so this asks
+ * a class rather than inferring structure with nested :has(). */
+
+section.plain:hover,
+section.positions article:hover {
+    color: var(--focus-fg);
+    transform: scale(var(--focus-scale));
+}
+
+/* Everything else steps back. Mostly a colour shift, because a heavy opacity
+ * drop reads as broken rather than as focus; the small opacity change under
+ * it is what carries headings, labels and links, which set their own colours
+ * and would otherwise stay lit while only the prose faded. */
+
+/* :not(:hover) matters. Without it this rule also matches the section being
+ * read, and an id beats the class selector that lights it, so a plain section
+ * dimmed itself on hover. */
+#resume:has(section:hover) > section:not(:hover) {
+    color: var(--recede-fg);
+    opacity: var(--recede);
+}
+
+/* inside the live section, the positions not being read step back too */
+section.positions:has(article:hover) article:not(:hover) {
+    color: var(--recede-fg);
+    opacity: var(--recede);
+}
+
+/* the header pool always answers "which section am I in" */
+section:hover > h2 {
+    background: linear-gradient(
+        100deg,
+        rgba(187, 154, 247, 0.24) 0%,
+        rgba(122, 162, 247, 0.13) 30%,
+        rgba(125, 207, 255, 0.05) 52%,
+        transparent 74%
+    );
+    box-shadow:
+        0 1px 0 rgba(187, 154, 247, 0.62),
+        0 12px 30px -14px rgba(187, 154, 247, 0.85);
+}
+
+/* ---- the boot scan --------------------------------------------------- */
+
+/* On load the scan runs down the page once, lighting each section as it
+ * reaches it, then hands over to the pointer. `backwards` holds each section
+ * dark through its own delay; nothing is left animating afterwards, so hover
+ * takes over cleanly. */
+
+/* The entrance runs once, and fills in unit by unit: each section, then each
+ * position inside it, in reading order. The builder stamps --i on every one,
+ * so the order follows the document rather than a hand-counted table that
+ * would go wrong the moment a job is added.
+ *
+ * A section holds its positions at opacity 0 through their own delays, so a
+ * section arrives as a bare header and then fills. */
+section,
+article {
+    animation: boot 520ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+    animation-delay: calc(var(--lead) + var(--i, 0) * var(--step));
+}
+
+/* The chase recurs. One 75s cycle per header with the flare packed into its
+ * first second, so each header lights, hands on to the next, and the page is
+ * quiet for the remaining seventy-four. The delay offsets the whole timeline
+ * rather than just the first pass, so the order holds on every cycle. --i is
+ * inherited from the section, so the header keeps its section's place. */
+section > h2 {
+    animation: sweep 75s linear infinite;
+    animation-delay: calc(var(--lead) + var(--i, 0) * var(--step));
+}
+
+/* Idle is what the chase is for, so it stops the moment the pointer is on the
+ * card and picks up where it left off when they leave. Pausing rather than
+ * cancelling means it never restarts mid-page. */
+#resume:hover section > h2 {
+    animation-play-state: paused;
+}
+
+@keyframes boot {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* the header takes the hit of the scan as it passes, then holds resting */
+@keyframes sweep {
+    0% {
+        box-shadow:
+            0 1px 0 rgba(125, 207, 255, 0.95),
+            0 12px 34px -12px rgba(125, 207, 255, 0.90);
+        text-shadow: 0 0 22px rgba(125, 207, 255, 0.90);
+    }
+    0.6% {
+        box-shadow:
+            0 1px 0 rgba(187, 154, 247, 0.70),
+            0 12px 30px -14px rgba(187, 154, 247, 0.80);
+        text-shadow: 0 0 19px rgba(187, 154, 247, 0.72);
+    }
+    1.4%, 100% {
+        box-shadow:
+            0 1px 0 rgba(187, 154, 247, 0.40),
+            0 10px 26px -14px rgba(187, 154, 247, 0.65);
+        text-shadow: 0 0 16px rgba(187, 154, 247, 0.55);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    h1::after,
+    section:hover > h2::after {
+        animation: none;
+        opacity: 1;
+    }
+    #resume:has(section:hover) h1::after { opacity: 0; }
+
+    /* no scan, no travel: everything is simply present */
+    section,
+    section > h2 { animation: none; }
+}
+
+/* ---- roles ---------------------------------------------------------- */
+
+h3 {
+    font-size: 16.5px;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 26px 0 2px 0;
+    padding: 0;
+    text-shadow: 0 0 18px rgba(122, 162, 247, 0.30);
+}
+
+/* The date line is the paragraph after a role heading. Headings in SELECTED
+ * ENGINEERING carry an <em> qualifier and are excluded, because what follows
+ * those is prose rather than a date. */
+p.dates {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin: 0 0 10px 0;
+}
+
+h3 em {
+    font-style: normal;
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--muted);
+    font-family: var(--mono);
+}
+
+/* the italic one-line role blurb */
+p > em:only-child {
+    color: var(--fg-dim);
+    font-size: 14px;
+}
+
+/* ---- projects within a role ----------------------------------------- */
+
+h4 {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin: 20px 0 6px 0;
+    padding: 0;
+    text-shadow: 0 0 14px rgba(158, 206, 106, 0.35);
+}
+
+/* ---- body ----------------------------------------------------------- */
+
+p {
+    margin: 0 0 10px 0;
+}
+
+ul {
+    margin: 8px 0 12px 0;
+    padding: 0 0 0 20px;
+    list-style: none;
+}
+
+li {
+    position: relative;
+    margin: 0 0 8px 0;
+    padding-left: 4px;
+}
+
+li::before {
+    content: "\25B8";
+    position: absolute;
+    left: -16px;
+    color: var(--orange);
+    text-shadow: 0 0 8px rgba(255, 158, 100, 0.55);
+}
+
+strong {
+    color: var(--yellow);
+    font-weight: 600;
+}
+
+code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    background: var(--bg-inset);
+    color: var(--cyan);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    box-shadow: inset 0 0 12px rgba(125, 207, 255, 0.07);
+}
+
+a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(125, 207, 255, 0.35);
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+a:hover {
+    color: #ffffff;
+    border-bottom-color: var(--cyan);
+    text-shadow: 0 0 14px rgba(125, 207, 255, 0.9);
+}
+
+/* ---- print and PDF: ink on paper ------------------------------------ */
+
+/* ---- print and PDF ---------------------------------------------------
+ *
+ * Ported from build.py, which is the tuned ATS document rather than a
+ * screen page with the colours taken out: 10pt at 1.12, spacing in points,
+ * real bullets, and the position title running into its dates on one line.
+ * The screen document's own spacing costs about a page and a half over this.
+ */
+
+/* ---- skills rows ------------------------------------------------------ */
+
+/* One labelled entry per line. The builder wraps each in a span rather than
+ * the markdown carrying hard breaks, so the source stays clean and the PDF
+ * renderer lays the block out as flowing prose. */
+p .row {
+    display: block;
+}
+
+/* ---- downloads -------------------------------------------------------- */
+
+.downloads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    align-items: center;
+    margin: 40px -14px 0 -14px;
+    padding: 16px 14px 4px 14px;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -1px 0 rgba(125, 207, 255, 0.14);
+}
+
+.downloads a {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 7px 13px;
+    background: rgba(125, 207, 255, 0.05);
+    transition: color 0.15s ease, border-color 0.15s ease,
+                background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.downloads a:hover {
+    color: #ffffff;
+    border-color: var(--cyan);
+    background: rgba(125, 207, 255, 0.13);
+    box-shadow: 0 0 18px rgba(125, 207, 255, 0.35);
+}
+
+/* ---- print ------------------------------------------------------------
+ *
+ * The PDF is built by build.py, which is the tuned ATS document. This block
+ * exists only so that hitting Ctrl+P on the page produces something legible
+ * rather than a dark rectangle. It is deliberately small: it strips the
+ * screen treatment and stops. Anything more elaborate is a second renderer
+ * competing with the one that already does the job properly.
+ */
+
+@media print {
+    body {
+        background: #ffffff;
+        color: #000000;
+        font-family: Calibri, Carlito, "Liberation Sans", Arial, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.3;
+        margin: 0;
+        padding: 0;
+    }
+
+    #resume {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    /* everything the screen adds, taken back off */
+    #resume::before,
+    h1::after,
+    h2::after,
+    .downloads { display: none; }
+
+    section,
+    article,
+    section > h2 {
+        color: inherit;
+        opacity: 1;
+        animation: none;
+        transform: none;
+    }
+
+    h1, h2, h3, h4, strong { color: #000000; }
+
+    h1, h2, h3, h4, p, li, a {
+        text-shadow: none;
+        box-shadow: none;
+    }
+
+    h1 { font-family: inherit; font-size: 20pt; }
+    h1 + p { font-family: inherit; color: #333333; border-bottom: 0; }
+
+    h2 {
+        font-family: inherit;
+        font-size: 11pt;
+        background: none;
+        border-bottom: 1px solid #000000;
+        margin: 12pt 0 4pt 0;
+        padding: 0 0 1pt 0;
+    }
+
+    h3 { font-size: 11.5pt; }
+    p.dates, h3 em { font-family: inherit; color: #444444; }
+    p > em:only-child { color: #333333; }
+
+    /* real bullets: the screen glyph is a pseudo-element, and nothing that
+     * parses a document can read one */
+    ul { padding-left: 15pt; list-style: disc; }
+    li { padding-left: 0; break-inside: avoid; }
+    li::before { content: none; }
+
+    code { font-family: inherit; background: none; border: 0; padding: 0; }
+
+    a, a:link, a:visited {
+        color: #000000;
+        border-bottom: 0;
+        text-decoration: underline;
+    }
+
+    abbr { text-decoration: none; font-variant: none; }
+    h2, h3, h4 { break-after: avoid; }
+}
+
+@page {
+    size: letter;
+    margin: 0.6in;
+}
+
+
+@media screen and (max-width: 820px) {
+    body { padding: 0; }
+    #resume {
+        padding: 32px 22px 40px;
+        border: 0;
+        border-radius: 0;
+    }
+    h1 { font-size: 26px; }
+    h2 { margin-left: -22px; margin-right: -22px; }
+}
+
+</style>
+</head>
+<body>
+<div id="resume">
+<h1>Jeff Wood</h1>
+<p>Greater Seattle, WA | <a href="https://www.linkedin.com/in/scripted-world/">linkedin.com/in/scripted-world</a> | <a href="https://github.com/scriptedworld">github.com/scriptedworld</a></p>
+<section class="plain" style="--i:0">
+<h2>ABOUT</h2>
+<p>A smile, or the spark of understanding, is what motivates me: either when someone comes to understand something I have helped teach, or when something I have built saves them time and effort. I have spent my career building automation, frameworks, services, and knowledge for my coworkers. I apply test-engineering discipline to developer tooling, from validation across thousands of hosts and artifact pipelines in regulated environments to self-service infrastructure and verification tooling for coding agents. I am at my best turning processes that depend on an expert into systems other engineers can run, understand, and rely on themselves.</p>
+</section>
+<section class="plain" style="--i:1">
+<h2>TECHNICAL SKILLS</h2>
+<p><span class="row"><strong>Languages:</strong> Python, Ruby, Java, JavaScript, C++, Rust, Go</span><span class="row"><strong>Infrastructure:</strong> Ansible, Puppet, Docker, k3s/k3d, Kubernetes, RHEL8+/CentOS, Debian, AWS (S3, Kinesis, Redshift)</span><span class="row"><strong>Securing developer pipelines:</strong> GitLab CI, Artifactory, JFrog Xray, SBOM/OCI analysis, CVE remediation, static analysis</span><span class="row"><strong>Observability:</strong> Datadog, operational metrics and dashboards, live queue/state instrumentation</span><span class="row"><strong>AI &amp; Agent Tooling:</strong> Agent orchestration, MCP tool-server development, shell-AST policy gates, structured-output contracts, enforced TDD and per-file coverage gates</span><span class="row"><strong>Data:</strong> SQL (MySQL, Postgres, Redshift), ETL pipeline design, streaming ingestion, Segment</span><span class="row"><strong>Practice:</strong> Test planning and frameworks, dependency and release management, vulnerability remediation, code review and merge gating, regulated change control</span></p>
+</section>
+<section class="positions" style="--i:2">
+<h2>EXPERIENCE</h2>
+<article style="--i:3">
+<h3>Staff Systems Engineer at ServiceNow</h3>
+<p class="dates">Aug 2021 – Present · Seattle, WA
+<em>Global Cloud Services: Test Engineering, then Pipeline Architecture.</em></p>
+<h4>Fleet validation framework</h4>
+<p>An Ansible-driven validation framework that runs server- and client-side checks across thousands of fleet hosts worldwide. It runs multiple times a day across the org, wired into production deployment tickets before and after scheduled maintenance of inter-datacenter routing, DNS, LDAP, and certificates. Across the full tenure:</p>
+<ul>
+<li>Maintained framework development and CI/CD and reviewed team and user-community contributions as a required approver for merges to main. Service owners also ran it against their own maintenance.</li>
+<li>As sole engineer on its Python 3.6 → 3.12 modernization, added RHEL9 and SELinux support while preserving the test-running interface. Replaced an expert-operated bootstrap with 2 lines, download and run the bootstrap, then run the tests, and cut the on-host preparation payload by about 80%; only the controller paid the Ansible-wheelhouse cost.</li>
+<li>Extended the framework from operator-mediated results to self-service reporting in central development tooling. Added export and upload and designed REST ingestion and dashboard, exposing one host through multi-datacenter environments. Results could be grouped by service, network segment, test suite, host OS, or other test metadata and compared across up to 3 runs for regression and trend analysis; held final sign-off.</li>
+</ul>
+<h4>Also at ServiceNow</h4>
+<ul>
+<li>Provided direct and secondary support inside US IL4 and IL5 segmented environments: testing and debugging the fleet validation framework; maintaining and mitigating vulnerabilities in the company&rsquo;s self-hosted Artifactory, including version updates and host replacements and migrations.</li>
+<li>Took ownership of the org&rsquo;s Python toolchain and built a reconciliation pipeline that ran for years: it tracked upstream releases, regenerated its build image, and filled missing RPMs across Python 3.9 → 3.14 and 3 OS targets.</li>
+<li>Built supply-chain analysis tooling for CVEs due in each audit window. It pulled candidate containers and compared Anchore and Trivy SBOMs to identify either the software release that fixed a CVE or the first candidate carrying a sufficiently new version of the flagged package, avoiding brittle RPM filename and version-string parsing.</li>
+<li>Built and stood up <code>sk8park</code>: one REST call returned a kubeconfig for an ephemeral k3s cluster, reclaimed on release or TTL. External Secrets Operator came pre-wired to the company&rsquo;s internal secret-management system, so Helm charts and services could retrieve their secrets without running on lab or production fabrics.</li>
+<li>Built <code>tempenv</code>, ending recurring manual cleanup across hundreds of hosts by redirecting cache and temporary files into ephemeral environments removed through lifecycle hooks. Precompiled per-OS wheelhouses install offline with no compilation or resolution, keeping one approved artifact byte-identical across disconnected federal environments and verifiable by hash.</li>
+</ul>
+</article>
+<article style="--i:4">
+<h3>Senior Software Engineer at Moz</h3>
+<p class="dates">Dec 2019 – Aug 2021 · Seattle, WA</p>
+<ul>
+<li>Maintained and extended Linkscape, Moz&rsquo;s Python web-scale link-index crawler, and the <code>qless</code> Redis-backed job queue beneath it, while a data scientist tuned the ranking model. Root-caused an indexing failure that had resisted diagnosis, unblocking reclamation of millions of stale objects from a multi-terabyte RIAK cluster.</li>
+</ul>
+</article>
+<article style="--i:5">
+<h3>Software Development Engineer, Data Engineering at Moz</h3>
+<p class="dates">Apr 2016 – Dec 2019 · Seattle, WA</p>
+<ul>
+<li>Designed and built the config-driven ETL platform feeding Amazon Redshift from internal and third-party systems: 16 data streams with schema management, transforms, and S3 I/O. Another team later ported it from on-prem to AWS largely unchanged; it was still running on my last day at Moz.</li>
+<li>Removed the engineering queue from adding business metrics: built a template-driven pipeline where analysts defined metrics as SQL files and the system executed and snapshotted them on schedule as Redshift time series.</li>
+<li>Instrumented an existing SPA for feature usage and timing, then built the Kinesis pipeline carrying its client-posted events into Redshift.</li>
+<li>Taught Python to the BI analysts I worked with, keeping pipeline development and analysis in one language.</li>
+</ul>
+</article>
+<article style="--i:6">
+<h3>Senior Software Development Engineer in Test at Moz</h3>
+<p class="dates">Nov 2013 – Mar 2016 · Seattle, WA</p>
+<ul>
+<li>Built an in-house visual regression service when CSS layout regressions depended on someone noticing and off-the-shelf tools were not widely available. It diffed page snapshots against historic baselines with a tuned significance threshold, then rendered animated comparisons so reviewers could see layout jitter at a glance.</li>
+<li>Built Ruby test and administration tooling for the payments and subscriptions platform, including coverage of the card-updater ingestion path.</li>
+<li>Built a distributed system generating realistic web and social traffic to test the web crawler and search-score prediction pipeline. Its HTTP Markov-chain service supplied post and article content across distinct personas, creating the synthetic corpora the traffic carried.</li>
+<li>Replaced a Ruby web application, moving middle-tier processing into its JavaScript front end.</li>
+<li>Taught 6 QAEs and SDETs Ruby, testing methodology, and CLI tooling.</li>
+</ul>
+</article>
+<article style="--i:7">
+<h3>Senior Software Development Engineer in Test at Cequint</h3>
+<p class="dates">Oct 2010 – Nov 2013 · Seattle, WA</p>
+<ul>
+<li>Led handset testing for a major carrier&rsquo;s Caller ID rollout. With the carrier&rsquo;s engineers, built a 300-element test list covering in-network and roaming handoffs while preserving Caller ID delivery and in-call quality; ran the suite at 7 sites, each representing a different vendor&rsquo;s core-network hardware.</li>
+<li>Mentored SDETs and QAEs in Ruby, shell, and testing technique.</li>
+<li>Built and ran <code>dist</code> at Cequint, the load-testing framework later published as the public MIT-licensed <code>dist</code> / <code>dist-graph</code> project. It proved projected national load could run on any 1 of 4 host sets after a data-center and rack failure, with 20% headroom.</li>
+</ul>
+</article>
+<article style="--i:8">
+<h3>Software Development Engineer in Test II at Amazon.com</h3>
+<p class="dates">Dec 2004 – Oct 2010 · Seattle, WA</p>
+<ul>
+<li>Built test suites, internal tools, and event-stream pipelines across 5 groups including Log Ingestion and Client-Side Metrics; started on Perl, wrote TestNG suites against Java services, then introduced Ruby-based test frameworks: more readable and maintainable than the Perl they replaced, and I got more done in them.</li>
+</ul>
+</article>
+<article style="--i:9">
+<h3>Earlier: DONOBi, Squarerigger, Medicalibration</h3>
+<p>Web applications and Perl data ingestion at DONOBi; C++ middleware and VB utility libraries at Squarerigger; C++ hardware-interface and imaging tools at Medicalibration.</p>
+</article>
+
+</section>
+<section class="positions" style="--i:10">
+<h2>SELECTED ENGINEERING</h2>
+<article style="--i:11">
+<h3>Quality tools: Bolt / Wrench / Toolbox <em>(Rust, Go, Python, and YAML)</em></h3>
+<p>Together, Bolt, Wrench, and Toolbox turn a suite of quality tools into one pass/fail gate. Bolt normalizes common tool outputs through configurable adapters and aggregates their decisions. Wrench provides schema-validated TOML, JSON, and YAML I/O in separate Rust, Go, and Python implementations, with bundled schemas and parity checks. Toolbox supplies the common and language-specific checks, tasks, and adapters Bolt runs.</p>
+</article>
+<article style="--i:12">
+<h3>Claude tools: Infobot / Qwark / Skid <em>(Go and Python)</em></h3>
+<p>Infobot, Qwark, and Skid work at Claude’s native control surfaces: its status line, PreToolUse hooks, and MCP. Infobot exposes project and session state, context use, rate-limit pace, subagent activity, and counterfactual API cost; its Go rewrite cut event latency from 40.4 ms to 11.8 ms. Qwark gates proposed shell commands against configurable patterns and records each decision with its matching rules and rule-set digest. Skid exposes queued MCP voice generation and identifies which agent needs attention. Claude lets you dictate; Skid lets it talk back.</p>
+</article>
+
+</section>
+
+<nav class="downloads">
+<a href="resume.pdf" download>Download PDF</a>
+<a href="resume.md" download>Download Markdown</a>
+<a href="https://github.com/scriptedworld">Source on GitHub</a>
+</nav>
+</div>
+</body>
+</html>

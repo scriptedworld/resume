@@ -1,0 +1,19 @@
+This repository contains work derived from another project.
+
+    src/resume_markdown/    derived from mikepqr/resume-markdown
+                            https://github.com/mikepqr/resume-markdown
+                            Copyright (c) 2020 Mike Lee Williams
+                            MIT, and LICENSE in this repository is his.
+
+The changes to it are structural. Markdown emits a flat list of sibling
+elements, which is enough to style a document and not enough to say "the
+section the pointer is in" or "the position being read". The builder now wraps
+each heading-led run in a section and each position in an article, marks date
+lines by their text, numbers every unit in reading order for the load-in
+sequence, and splits labelled skill entries onto their own lines. All of it is
+presentation the source file should not have to carry.
+
+    build-pdf.py            written for this resume. Not derived from anything.
+
+Everything else -- the stylesheets, the Justfile, the resume itself -- is my
+own work.

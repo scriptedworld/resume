@@ -1,0 +1,4 @@
+.ephemera/
+.venv/
+__pycache__/
+resume.html

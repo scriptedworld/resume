@@ -1,0 +1,328 @@
+/* ENCOM, for the public-facing resume.
+ *
+ * Tron: Legacy console. Black ground, cyan traces, amber for the accent that
+ * the grid uses when something is live. Restrained on purpose: the glow is on
+ * the rules and the headings, never on body text, because glowing paragraphs
+ * are unreadable and this is still a resume.
+ *
+ * Screen is dark. Print and PDF flip to ink-on-paper further down. Delete the
+ * @media print block if you want the PDF dark too.
+ */
+
+:root {
+    --bg:        #04070d;
+    --bg-card:   #080d16;
+    --bg-inset:  #0d141f;
+    --fg:        #cfe6f0;
+    --fg-dim:    #9fbecd;
+    --muted:     #5c7d8d;
+    --cyan:      #6fc3df;
+    --cyan-hot:  #a9e5f5;
+    --amber:     #ffae57;
+    --amber-dim: #c9873f;
+    --line:      #17303c;
+    --glow:      rgba(111, 195, 223, 0.45);
+
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+body {
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(111, 195, 223, 0.030) 0px,
+            rgba(111, 195, 223, 0.030) 1px,
+            transparent 1px,
+            transparent 4px
+        ),
+        var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+    padding: 48px 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+#resume {
+    position: relative;
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 56px 64px 64px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    box-shadow:
+        0 0 0 1px rgba(111, 195, 223, 0.08),
+        0 0 60px rgba(111, 195, 223, 0.06),
+        0 18px 60px rgba(0, 0, 0, 0.8);
+}
+
+/* HUD corner brackets */
+#resume::before,
+#resume::after {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--cyan);
+    opacity: 0.7;
+}
+#resume::before {
+    top: -1px;
+    left: -1px;
+    border-right: 0;
+    border-bottom: 0;
+}
+#resume::after {
+    bottom: -1px;
+    right: -1px;
+    border-left: 0;
+    border-top: 0;
+}
+
+/* ---- name and contact ---------------------------------------------- */
+
+h1 {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--cyan-hot);
+    text-shadow: 0 0 12px var(--glow);
+    margin: 0;
+    /* letter-spacing pads the right edge; pull it back for true centring */
+    padding: 0 0 6px 0.34em;
+    text-align: center;
+}
+
+h1 + p {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: lowercase;
+    color: var(--muted);
+    margin: 0;
+    padding: 0 0 26px 0;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(111, 195, 223, 0.18);
+}
+
+h1 + p a {
+    color: var(--cyan);
+}
+
+/* ---- sections ------------------------------------------------------- */
+
+h2 {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin: 38px 0 0 0;
+    padding: 0 0 8px 0;
+    border-bottom: 1px solid var(--amber-dim);
+}
+
+h2::before {
+    content: "\2500\2500  ";
+    color: var(--amber-dim);
+}
+
+h2 + p {
+    margin-top: 16px;
+}
+
+/* ---- roles ---------------------------------------------------------- */
+
+h3 {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--cyan-hot);
+    text-shadow: 0 0 10px rgba(111, 195, 223, 0.25);
+    margin: 26px 0 2px 0;
+    padding: 0;
+}
+
+/* The date line is the paragraph after a role heading. Headings in SELECTED
+ * ENGINEERING carry an <em> qualifier and are excluded, because what follows
+ * those is prose rather than a date. */
+h3:not(:has(em)) + p {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px 0;
+}
+
+h3 em {
+    font-style: normal;
+    font-size: 12px;
+    color: var(--amber-dim);
+}
+
+p > em:only-child {
+    color: var(--fg-dim);
+    font-size: 14px;
+}
+
+/* ---- projects within a role ----------------------------------------- */
+
+h4 {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin: 20px 0 6px 0;
+    padding: 0;
+}
+
+h4::before {
+    content: "\203A  ";
+    color: var(--amber-dim);
+}
+
+/* ---- body ----------------------------------------------------------- */
+
+p {
+    margin: 0 0 10px 0;
+}
+
+ul {
+    margin: 8px 0 12px 0;
+    padding: 0 0 0 20px;
+    list-style: none;
+}
+
+li {
+    position: relative;
+    margin: 0 0 8px 0;
+    padding-left: 4px;
+}
+
+li::before {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: 0.62em;
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--cyan);
+    transform: rotate(45deg);
+}
+
+strong {
+    color: var(--cyan);
+    font-weight: 600;
+}
+
+code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    background: var(--bg-inset);
+    color: var(--amber);
+    border: 1px solid var(--line);
+    padding: 1px 5px;
+}
+
+a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(111, 195, 223, 0.35);
+}
+
+a:hover {
+    color: var(--cyan-hot);
+    border-bottom-color: var(--cyan);
+}
+
+/* ---- print and PDF: ink on paper ------------------------------------ */
+
+@media print {
+    body {
+        background: #ffffff;
+        color: #14161f;
+        font-size: 10pt;
+        line-height: 1.4;
+        padding: 0;
+        margin: 0;
+    }
+    #resume {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: 0;
+        box-shadow: none;
+    }
+    #resume::before,
+    #resume::after { display: none; }
+    h1 {
+        color: #000000;
+        font-size: 20pt;
+        letter-spacing: 0.18em;
+        text-shadow: none;
+    }
+    h1 + p {
+        color: #333333;
+        border-bottom-color: #bbbbbb;
+        box-shadow: none;
+        padding-bottom: 12px;
+        text-transform: none;
+    }
+    h2 {
+        color: #000000;
+        border-bottom-color: #000000;
+        letter-spacing: 0.16em;
+        margin-top: 18px;
+    }
+    h2::before { content: ""; }
+    h3 {
+        color: #000000;
+        font-size: 11.5pt;
+        text-shadow: none;
+        margin-top: 14px;
+    }
+    h3 em,
+    h3:not(:has(em)) + p { color: #444444; }
+    h4        { color: #000000; }
+    h4::before { color: #555555; }
+    strong    { color: #000000; }
+    p > em:only-child { color: #333333; }
+    li::before { border-color: #555555; }
+    code      { background: none; border: 0; color: #000000; padding: 0; }
+    a, a:link, a:visited {
+        color: #000000;
+        border-bottom: 0;
+        text-decoration: underline;
+    }
+    abbr { text-decoration: none; font-variant: none; }
+    h2, h3, h4 { break-after: avoid; }
+    li, p      { break-inside: avoid; }
+}
+
+@page {
+    size: letter;
+    margin: 0.5in 0.7in;
+}
+
+@media screen and (max-width: 820px) {
+    body { padding: 0; }
+    #resume {
+        padding: 32px 20px 40px;
+        border: 0;
+    }
+    #resume::before,
+    #resume::after { display: none; }
+    h1 { font-size: 21px; letter-spacing: 0.2em; padding-left: 0.2em; }
+}
