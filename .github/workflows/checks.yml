@@ -1,0 +1,63 @@
+# Build both documents and run the publication gate, on a machine that is not
+# mine.
+#
+# That last part is the point. Every check in this estate has historically run
+# where the environment was already correct, which is how a claim like "174
+# tests pass" survives being false on a clean clone. This workflow starts from
+# nothing, so a missing dependency, a font that only exists on my laptop, or a
+# build step that quietly relied on a stale file all show up here rather than
+# in front of somebody reading the repository.
+
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install just
+        uses: extractions/setup-just@v2
+
+      - name: Chrome
+        run: google-chrome --version
+
+      - name: Build both documents
+        run: just build
+
+      # The gate: nothing private in a published artefact, and the PDF still
+      # fits two pages.
+      - name: Checks
+        run: just checks
+
+      # A build producing a different page than the one committed means the
+      # artefact being served is stale. Better to fail here than to serve it.
+      #
+      # index.html only. The PDF is NOT byte-reproducible -- Chrome stamps each
+      # one with a fresh document id, so two builds of identical input differ --
+      # and asserting it here would make this job permanently red, which is a
+      # worse failure than the one it was meant to catch. `just checks` covers
+      # the PDF on the things that are actually stable: its contact block and
+      # its page count.
+      - name: The committed page is current
+        run: |
+          git diff --exit-code -- index.html \
+            || { echo "index.html is stale; run 'just build' and commit it"; exit 1; }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resume
+          path: |
+            index.html
+            resume.pdf
+            resume.md
