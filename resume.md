@@ -1,6 +1,6 @@
 # Jeff Wood
 
-Greater Seattle, WA | linkedin.com/in/scripted-world | github.com/scriptedworld
+Greater Seattle, WA | linkedin.com/in/scriptedworld | github.com/scriptedworld
 
 ## ABOUT
 
