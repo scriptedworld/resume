@@ -1,0 +1,610 @@
+/* D1C3 Goblin, synthwave cut, for the public-facing resume.
+ *
+ * Same architecture as resume.tokyo-night.css -- the two diff cleanly against
+ * each other -- with the palette swapped for the D1C3 Goblin one: hot magenta
+ * and electric cyan on a near-black indigo. The neon is on the furniture:
+ * section headers sit in a glow pool with a lit edge, the name carries a
+ * magenta/cyan chromatic split, the card has a hot top seam. Body text is
+ * never glowed, because glowing paragraphs are unreadable and this is still a
+ * resume someone has to skim in ten seconds.
+ *
+ * Screen is dark. Print and PDF flip to ink-on-paper further down, and that
+ * block strips every glow, gradient and shadow.
+ *
+ * Palette is sampled from the D1C3 GOBLIN artwork and is the same set driving
+ * the desktop, terminals and editors. Roles are mapped exactly as in the Tokyo
+ * Night sheet -- sections, roles, projects, links, bullets, emphasis all keep
+ * their jobs -- so switching themes changes the colour and nothing else.
+ *
+ * This palette runs hotter than Tokyo Night. Two places it is deliberately
+ * pulled back: the glow pool under a section header is a touch fainter, and
+ * the bullet glyph is not glowed as hard, because at full strength magenta on
+ * this background haloes into the text beside it.
+ */
+
+:root {
+    --bg:        #080615;  /* dark_background: the page behind the card */
+    --bg-card:   #0D0A20;  /* background: the card itself */
+    --bg-inset:  #05030D;  /* darker_background: inline code */
+    --fg:        #E8DCFF;
+    --fg-dim:    #D3C6F5;
+    --muted:     #6E5A9E;
+    --accent:    #FF2BD6;  /* the signature: section headers, seam, name wash */
+    --blue:      #2E7BFF;
+    --cyan:      #1FE0FF;
+    --magenta:   #E91CD7;
+    --green:     #2BFF9E;
+    --orange:    #FF7A1A;
+    --yellow:    #FFD426;
+    --red:       #FF2E6E;
+    --line:      #1C1442;  /* lighter_background */
+
+    /* Focus falloff. Mostly colour, with a light opacity change under it:
+     * a big opacity drop reads as the page being broken rather than as one
+     * thing being read. Raise --recede toward 1 to soften further. */
+    --focus-fg:  #FFFFFF;
+    --recede-fg: #B5A3DC;
+    --recede:    0.94;
+    /* how much the unit being read grows. Transform, not font-size: font-size
+     * reflows and shoves everything below it down the page. */
+    --focus-scale: 1.018;
+
+    /* the load-in chase: when it starts, and the gap between units */
+    --lead: 240ms;
+    --step: 125ms;
+
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: "JetBrainsMono Nerd Font", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+body {
+    background:
+        radial-gradient(900px 420px at 50% -8%, rgba(255, 43, 214, 0.10), transparent 70%),
+        radial-gradient(700px 400px at 100% 100%, rgba(31, 224, 255, 0.07), transparent 70%),
+        var(--bg);
+    background-attachment: fixed;
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+    padding: 48px 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+#resume {
+    position: relative;
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 56px 64px 64px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow:
+        0 0 0 1px rgba(255, 43, 214, 0.07),
+        0 0 90px rgba(255, 43, 214, 0.06),
+        0 18px 60px rgba(0, 0, 0, 0.65);
+    overflow: hidden;
+}
+
+/* Hot seam across the top of the card. Magenta into cyan, the same gradient
+ * the desktop puts on a focused window border. */
+#resume::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--accent) 22%,
+        var(--cyan) 50%,
+        var(--blue) 78%,
+        transparent
+    );
+    opacity: 0.9;
+    box-shadow: 0 0 14px rgba(31, 224, 255, 0.55);
+}
+
+/* ---- name and contact ---------------------------------------------- */
+
+h1 {
+    font-family: var(--mono);
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
+    padding: 0 0 4px 0;
+    text-align: center;
+    /* chromatic split in the two signature hues, then a magenta wash */
+    text-shadow:
+        0.6px 0 0 rgba(255, 43, 214, 0.34),
+       -0.6px 0 0 rgba(31, 224, 255, 0.34),
+        0 0 22px rgba(255, 43, 214, 0.38);
+}
+
+h1 + p {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    margin: 0 0 8px 0;
+    padding: 0 0 28px 0;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(31, 224, 255, 0.16);
+}
+
+h1 + p a {
+    color: var(--cyan);
+    text-shadow: 0 0 12px rgba(31, 224, 255, 0.45);
+}
+
+/* ---- sections: the glow pool ---------------------------------------- */
+
+h2 {
+    position: relative;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 40px -14px 0 -14px;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--line);
+    /* The pool, brightest at the left and gone by two-thirds across. Held a
+     * little under the Tokyo Night values: this magenta is hotter and at the
+     * same alpha the wash creeps into the body text under the header. */
+    background: linear-gradient(
+        100deg,
+        rgba(255, 43, 214, 0.13) 0%,
+        rgba(46, 123, 255, 0.08) 30%,
+        rgba(31, 224, 255, 0.03) 52%,
+        transparent 72%
+    );
+    box-shadow:
+        0 1px 0 rgba(255, 43, 214, 0.40),
+        0 10px 26px -14px rgba(255, 43, 214, 0.60);
+    text-shadow: 0 0 16px rgba(255, 43, 214, 0.50);
+    transition: background 0.22s ease, box-shadow 0.22s ease;
+}
+
+h2 + p {
+    margin-top: 18px;
+}
+
+/* ---- the caret ------------------------------------------------------ */
+
+/* One caret, two homes. It rests after the name and moves to the heading of
+ * whichever section the pointer is in. Section headings only: a caret on every
+ * position title turns a chase into a twitch. Sized in em so it matches the
+ * heading it sits after, and always present at opacity 0 so nothing reflows
+ * when it moves. */
+
+h1::after,
+h2::after {
+    content: "";
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 0.3em;
+    vertical-align: -0.13em;
+    background: var(--cyan);
+    box-shadow: 0 0 12px rgba(31, 224, 255, 0.85);
+    opacity: 0;
+}
+
+/* The caret marks the smallest thing the pointer is inside: a position if
+ * there is one, else the section, else the name. Exactly one is ever lit. */
+
+h1::after {
+    animation: caret 1.05s steps(1, end) infinite;
+}
+
+/* pointer is inside a section: the name gives the caret up */
+#resume:has(section:hover) h1::after {
+    animation: none;
+    opacity: 0;
+}
+
+section:hover > h2::after {
+    animation: caret 1.05s steps(1, end) infinite;
+}
+
+@keyframes caret {
+    0%, 48%   { opacity: 1; }
+    52%, 100% { opacity: 0; }
+}
+
+/* ---- the live unit --------------------------------------------------- */
+
+section,
+article {
+    transition: color 0.22s ease, opacity 0.22s ease, transform 0.22s ease;
+    /* grows to the right off the text column rather than out of both margins */
+    transform-origin: left center;
+}
+
+/* Body text lifts on the unit being read. A section holding positions is too
+ * coarse to light up whole -- EXPERIENCE is one section and six jobs -- so
+ * there the position is the unit. A section with no positions in it is short
+ * enough to be one. Headings, labels and links keep their own colours. */
+
+section.plain:hover,
+section.positions article:hover {
+    color: var(--focus-fg);
+    transform: scale(var(--focus-scale));
+}
+
+/* Everything else steps back. Mostly a colour shift, because a heavy opacity
+ * drop reads as broken rather than as focus; the small opacity change under
+ * it is what carries headings, labels and links, which set their own colours
+ * and would otherwise stay lit while only the prose faded. */
+
+/* :not(:hover) matters. Without it this rule also matches the section being
+ * read, and an id beats the class selector that lights it, so a plain section
+ * dimmed itself on hover. */
+#resume:has(section:hover) > section:not(:hover) {
+    color: var(--recede-fg);
+    opacity: var(--recede);
+}
+
+/* inside the live section, the positions not being read step back too */
+section.positions:has(article:hover) article:not(:hover) {
+    color: var(--recede-fg);
+    opacity: var(--recede);
+}
+
+/* the header pool always answers "which section am I in" */
+section:hover > h2 {
+    background: linear-gradient(
+        100deg,
+        rgba(255, 43, 214, 0.21) 0%,
+        rgba(46, 123, 255, 0.12) 30%,
+        rgba(31, 224, 255, 0.05) 52%,
+        transparent 74%
+    );
+    box-shadow:
+        0 1px 0 rgba(255, 43, 214, 0.62),
+        0 12px 30px -14px rgba(255, 43, 214, 0.85);
+}
+
+/* ---- the boot scan --------------------------------------------------- */
+
+/* On load the scan runs down the page once, lighting each section as it
+ * reaches it, then hands over to the pointer. `backwards` holds each section
+ * dark through its own delay; nothing is left animating afterwards, so hover
+ * takes over cleanly.
+ *
+ * The builder stamps --i on every section and position, so the order follows
+ * the document rather than a hand-counted table that would go wrong the moment
+ * a job is added. A section holds its positions at opacity 0 through their own
+ * delays, so a section arrives as a bare header and then fills. */
+section,
+article {
+    animation: boot 520ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+    animation-delay: calc(var(--lead) + var(--i, 0) * var(--step));
+}
+
+/* The chase recurs. One 75s cycle per header with the flare packed into its
+ * first second, so each header lights, hands on to the next, and the page is
+ * quiet for the remaining seventy-four. The delay offsets the whole timeline
+ * rather than just the first pass, so the order holds on every cycle. --i is
+ * inherited from the section, so the header keeps its section's place. */
+section > h2 {
+    animation: sweep 75s linear infinite;
+    animation-delay: calc(var(--lead) + var(--i, 0) * var(--step));
+}
+
+/* Idle is what the chase is for, so it stops the moment the pointer is on the
+ * card and picks up where it left off when they leave. Pausing rather than
+ * cancelling means it never restarts mid-page. */
+#resume:hover section > h2 {
+    animation-play-state: paused;
+}
+
+@keyframes boot {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* The header takes the hit of the scan as it passes, then holds resting. The
+ * flare arrives cyan and settles back to magenta, which is the same handoff
+ * the card seam makes left to right. */
+@keyframes sweep {
+    0% {
+        box-shadow:
+            0 1px 0 rgba(31, 224, 255, 0.95),
+            0 12px 34px -12px rgba(31, 224, 255, 0.90);
+        text-shadow: 0 0 22px rgba(31, 224, 255, 0.90);
+    }
+    0.6% {
+        box-shadow:
+            0 1px 0 rgba(255, 43, 214, 0.70),
+            0 12px 30px -14px rgba(255, 43, 214, 0.80);
+        text-shadow: 0 0 19px rgba(255, 43, 214, 0.70);
+    }
+    1.4%, 100% {
+        box-shadow:
+            0 1px 0 rgba(255, 43, 214, 0.40),
+            0 10px 26px -14px rgba(255, 43, 214, 0.60);
+        text-shadow: 0 0 16px rgba(255, 43, 214, 0.50);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    h1::after,
+    section:hover > h2::after {
+        animation: none;
+        opacity: 1;
+    }
+    #resume:has(section:hover) h1::after { opacity: 0; }
+
+    /* no scan, no travel: everything is simply present */
+    section,
+    section > h2 { animation: none; }
+}
+
+/* ---- roles ---------------------------------------------------------- */
+
+h3 {
+    font-size: 16.5px;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 26px 0 2px 0;
+    padding: 0;
+    text-shadow: 0 0 18px rgba(46, 123, 255, 0.32);
+}
+
+/* The date line is the paragraph after a role heading. Headings in SELECTED
+ * ENGINEERING carry an <em> qualifier and are excluded, because what follows
+ * those is prose rather than a date. */
+p.dates {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin: 0 0 10px 0;
+}
+
+h3 em {
+    font-style: normal;
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--muted);
+    font-family: var(--mono);
+}
+
+/* the italic one-line role blurb */
+p > em:only-child {
+    color: var(--fg-dim);
+    font-size: 14px;
+}
+
+/* ---- projects within a role ----------------------------------------- */
+
+h4 {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin: 20px 0 6px 0;
+    padding: 0;
+    text-shadow: 0 0 14px rgba(43, 255, 158, 0.32);
+}
+
+/* ---- body ----------------------------------------------------------- */
+
+p {
+    margin: 0 0 10px 0;
+}
+
+ul {
+    margin: 8px 0 12px 0;
+    padding: 0 0 0 20px;
+    list-style: none;
+}
+
+li {
+    position: relative;
+    margin: 0 0 8px 0;
+    padding-left: 4px;
+}
+
+/* Glow held well under the Tokyo Night value. This orange is more saturated,
+ * and at 0.55 the marker haloes into the first word of its own bullet. */
+li::before {
+    content: "\25B8";
+    position: absolute;
+    left: -16px;
+    color: var(--orange);
+    text-shadow: 0 0 8px rgba(255, 122, 26, 0.38);
+}
+
+strong {
+    color: var(--yellow);
+    font-weight: 600;
+}
+
+code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    background: var(--bg-inset);
+    color: var(--cyan);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    box-shadow: inset 0 0 12px rgba(31, 224, 255, 0.07);
+}
+
+a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(31, 224, 255, 0.35);
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+a:hover {
+    color: #ffffff;
+    border-bottom-color: var(--cyan);
+    text-shadow: 0 0 14px rgba(31, 224, 255, 0.9);
+}
+
+/* ---- skills rows ------------------------------------------------------ */
+
+/* One labelled entry per line. The builder wraps each in a span rather than
+ * the markdown carrying hard breaks, so the source stays clean and the PDF
+ * renderer lays the block out as flowing prose. */
+p .row {
+    display: block;
+}
+
+/* ---- downloads -------------------------------------------------------- */
+
+.downloads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    align-items: center;
+    margin: 40px -14px 0 -14px;
+    padding: 16px 14px 4px 14px;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -1px 0 rgba(31, 224, 255, 0.14);
+}
+
+.downloads a {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 7px 13px;
+    background: rgba(31, 224, 255, 0.05);
+    transition: color 0.15s ease, border-color 0.15s ease,
+                background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.downloads a:hover {
+    color: #ffffff;
+    border-color: var(--cyan);
+    background: rgba(31, 224, 255, 0.13);
+    box-shadow: 0 0 18px rgba(31, 224, 255, 0.35);
+}
+
+/* ---- print ------------------------------------------------------------
+ *
+ * The PDF is built by build-pdf.py, which is the tuned ATS document. This
+ * block exists only so that hitting Ctrl+P on the page produces something
+ * legible rather than a dark rectangle. It is deliberately small: it strips
+ * the screen treatment and stops. Anything more elaborate is a second
+ * renderer competing with the one that already does the job properly.
+ *
+ * Identical to the Tokyo Night sheet's print block. Nothing here is themed --
+ * it is ink on paper either way -- so the two stay in step by staying the
+ * same.
+ */
+
+@media print {
+    body {
+        background: #ffffff;
+        color: #000000;
+        font-family: Calibri, Carlito, "Liberation Sans", Arial, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.3;
+        margin: 0;
+        padding: 0;
+    }
+
+    #resume {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    /* everything the screen adds, taken back off */
+    #resume::before,
+    h1::after,
+    h2::after,
+    .downloads { display: none; }
+
+    section,
+    article,
+    section > h2 {
+        color: inherit;
+        opacity: 1;
+        animation: none;
+        transform: none;
+    }
+
+    h1, h2, h3, h4, strong { color: #000000; }
+
+    h1, h2, h3, h4, p, li, a {
+        text-shadow: none;
+        box-shadow: none;
+    }
+
+    h1 { font-family: inherit; font-size: 20pt; }
+    h1 + p { font-family: inherit; color: #333333; border-bottom: 0; }
+
+    h2 {
+        font-family: inherit;
+        font-size: 11pt;
+        background: none;
+        border-bottom: 1px solid #000000;
+        margin: 12pt 0 4pt 0;
+        padding: 0 0 1pt 0;
+    }
+
+    h3 { font-size: 11.5pt; }
+    p.dates, h3 em { font-family: inherit; color: #444444; }
+    p > em:only-child { color: #333333; }
+
+    /* real bullets: the screen glyph is a pseudo-element, and nothing that
+     * parses a document can read one */
+    ul { padding-left: 15pt; list-style: disc; }
+    li { padding-left: 0; break-inside: avoid; }
+    li::before { content: none; }
+
+    code { font-family: inherit; background: none; border: 0; padding: 0; }
+
+    a, a:link, a:visited {
+        color: #000000;
+        border-bottom: 0;
+        text-decoration: underline;
+    }
+
+    abbr { text-decoration: none; font-variant: none; }
+    h2, h3, h4 { break-after: avoid; }
+}
+
+@page {
+    size: letter;
+    margin: 0.6in;
+}
+
+
+@media screen and (max-width: 820px) {
+    body { padding: 0; }
+    #resume {
+        padding: 32px 22px 40px;
+        border: 0;
+        border-radius: 0;
+    }
+    h1 { font-size: 26px; }
+    h2 { margin-left: -22px; margin-right: -22px; }
+}
