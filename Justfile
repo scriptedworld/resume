@@ -63,9 +63,14 @@ leak-scan:
             fail=1
         fi
     done
+    # Extract first and fail if that fails. Piped straight into grep, an
+    # extraction error reads as text with no leak in it.
     if [ -f resume.pdf ]; then
-        if uvx --from pdfminer.six pdf2txt.py resume.pdf 2>/dev/null \
-           | grep -qEi "$private"; then
+        if ! text=$(uvx --from pdfminer.six pdf2txt.py resume.pdf); then
+            echo "leak-scan: could not extract text from resume.pdf"
+            exit 1
+        fi
+        if printf '%s' "$text" | grep -qEi "$private"; then
             echo "LEAK: resume.pdf carries private contact detail"
             fail=1
         fi
