@@ -43,18 +43,31 @@ pdf:
 # everything that must be true before this is published
 checks: leak-scan pages
 
-# NOTHING PRIVATE REACHES A PUBLISHED ARTEFACT.
+# Nothing private reaches a published artefact.
 #
 # The source this is derived from carries a home town, a phone number and a
 # personal address. The public copy carries neither, and the only thing keeping
 # them apart is one edited line. This asserts it against the built files rather
 # than against the intention.
+#
+# The patterns are themselves the private detail, so they are not in this
+# repository. They come from $LEAK_PATTERNS, which CI sets from a secret, or
+# else from the gitignored .leak-patterns, one extended regex on one line. With
+# neither the scan fails: a leak check with nothing to look for passes every
+# file, which is worse than no check.
 
 # no private contact detail in any published artefact
 leak-scan:
     #!/usr/bin/env bash
     set -euo pipefail
-    private='REDACTED|REDACTED|REDACTED'
+    private="${LEAK_PATTERNS:-}"
+    if [ -z "$private" ] && [ -f .leak-patterns ]; then
+        private=$(head -n 1 .leak-patterns)
+    fi
+    if [ -z "$private" ]; then
+        echo "leak-scan: no patterns; set LEAK_PATTERNS or write .leak-patterns"
+        exit 1
+    fi
     fail=0
     for f in resume.md index.html; do
         [ -f "$f" ] || continue

@@ -45,6 +45,11 @@ separating them is one edited line. `leak-scan` reads the built files rather
 than trusting that line, and it was verified by seeding a leak and watching it
 fail rather than by watching it pass.
 
+The patterns it looks for are the private detail itself, so they are not in
+the repository: `LEAK_PATTERNS` in the environment, set from a secret in CI,
+or else the first line of a gitignored `.leak-patterns`. With neither, the scan
+fails.
+
 **The PDF still fits two pages.** Read from the page tree's `/Count`, not by
 counting `/Type /Page` occurrences, which over-reports: that method claimed
 three pages for a two page document here and sent an investigation the wrong

@@ -37,7 +37,12 @@ jobs:
 
       # The gate: nothing private in a published artefact, and the PDF still
       # fits two pages.
+      #
+      # The leak patterns are private detail, so they live in a repository
+      # secret rather than in the tree.
       - name: Checks
+        env:
+          LEAK_PATTERNS: ${{ secrets.LEAK_PATTERNS }}
         run: just checks
 
       # A build producing a different page than the one committed means the
