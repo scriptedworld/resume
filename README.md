@@ -20,8 +20,8 @@ break on paper. The break belongs to the page, so it lives in the builder.
 
 ## Two renderers
 
-    src/resume_markdown/    the page. Derived from mikepqr/resume-markdown
-                            under MIT. See NOTICE.
+    build-page.py           the page. Parsed with tree-sitter-markdown, whose
+                            sections become the page's sections and articles.
     build-pdf.py            the PDF. Deliberately plain -- no tables, no
                             columns, no headers or footers, because applicant
                             tracking systems mangle all three. Two pages.
@@ -31,10 +31,9 @@ and one stylesheet trying to be both was worse at each. The page has a caret
 that follows the pointer and a load-in sequence; the PDF has none of that, and
 its print stylesheet exists only so that Ctrl+P on the page is legible.
 
-**They must not share an output directory.** `build-pdf.py` stages its own
-`<name>.html` beside its output and removes it on the way out, which deletes
-the page builder's `resume.html` if both are pointed at the same place. The
-Justfile stages the PDF under `.ephemera/`.
+**The PDF is staged under `.ephemera/`.** `build-pdf.py` writes its own
+`<name>.html` beside its output and removes it on the way out, so pointed at
+the repository root it would delete any HTML file of the same name there.
 
 ## What `just checks` asserts
 
@@ -76,8 +75,6 @@ finds it is not really published.
 
 ## Licence
 
-The tooling is Apache-2.0; see LICENSE. The page builder under
-`src/resume_markdown/` is derived from mikepqr/resume-markdown and stays MIT
-under his notice, which sits with his code. The resume itself -- `resume.md`,
-`resume.pdf`, `index.html` -- is all rights reserved: published to be read,
-not licensed for reuse. NOTICE draws the line file by file.
+The tooling is Apache-2.0; see LICENSE. The resume itself, meaning
+`resume.md`, `resume.pdf` and `index.html`, is all rights reserved: published
+to be read, not licensed for reuse. NOTICE draws the line file by file.

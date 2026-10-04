@@ -6,8 +6,7 @@
 #
 #     build-pdf.py            the ATS document. Plain layout by design: no
 #                             tables, no columns, no headers. Two pages.
-#     src/resume_markdown/    the web page. Derived from mikepqr/resume-markdown
-#                             under MIT; see NOTICE.
+#     build-page.py           the web page, parsed with tree-sitter-markdown.
 #
 # This tree deliberately does NOT import toolbox's just/base.just. A public
 # repository whose `just build` needs two sibling clones cannot be built by
@@ -16,9 +15,9 @@
 
 set unstable := true
 
-# The staging directory for the PDF build. It must NOT be this directory:
+# The staging directory for the PDF build, kept away from the published files:
 # build-pdf.py writes <name>.html beside its output and deletes it on the way
-# out, which silently destroys the page builder's own resume.html.
+# out, which would silently remove any page of that name here.
 pdf_stage := '.ephemera/pdf'
 
 _default:
@@ -29,9 +28,7 @@ build: html pdf
 
 # the web page. Pages serves index.html, so that is what lands.
 html:
-    uv run --frozen resume-markdown build resume.md --no-pdf
-    @mv resume.html index.html
-    @echo "wrote index.html"
+    uv run --frozen python build-page.py resume.md --css resume.css --out index.html
 
 # the ATS document, staged away from the page builder's output
 pdf:
@@ -115,5 +112,5 @@ serve:
 
 # build outputs only. resume.md is source and is never removed.
 clean:
-    rm -rf .ephemera/pdf resume.html resume.pdf index.html
+    rm -rf .ephemera/pdf resume.pdf index.html
     @echo "clean: build outputs removed"

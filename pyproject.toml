@@ -1,36 +1,16 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
-name = "resume-markdown"
-version = "1.0.1"
-description = "Convert Markdown resumes to HTML and PDF"
+name = "resume"
+version = "1.0.0"
+description = "One resume, as a web page and as a PDF, built from one markdown file"
 readme = "README.md"
-license = {text = "MIT"}
-authors = [
-    {name = "Mike Lee Williams", email = "mike@mike.place"}
-]
-requires-python = ">=3.9"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
 dependencies = [
-    "markdown>=3.0",
-]
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Text Processing :: Markup :: Markdown",
+    "tree-sitter>=0.25",
+    "tree-sitter-markdown>=0.5",
 ]
 
-[project.urls]
-Homepage = "https://github.com/mikepqr/resume-markdown"
-Repository = "https://github.com/mikepqr/resume-markdown"
-Issues = "https://github.com/mikepqr/resume-markdown/issues"
-
-[project.scripts]
-resume-markdown = "resume_markdown:main"
+# Nothing here is installed. build-page.py runs inside the project
+# environment, which is all the dependencies above are for.
+[tool.uv]
+package = false

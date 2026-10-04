@@ -2,7 +2,7 @@ resume
 Copyright 2026 Jeff Wood
 
 The tooling is licensed under the Apache License, Version 2.0. See LICENSE.
-The resume is not. This repository holds three kinds of thing, under
+The resume is not. This repository holds two kinds of thing, under
 different terms.
 
 ## The resume itself
@@ -14,28 +14,10 @@ They are published so they can be read, and for no other purpose. Nothing
 here grants permission to copy, adapt or redistribute them, and the tooling
 being open does not make the document open.
 
-## The page builder: derived, MIT
-
-`src/resume_markdown/` is derived from mikepqr/resume-markdown by
-Mike Lee Williams, https://github.com/mikepqr/resume-markdown, under the MIT
-licence. His notice is `src/resume_markdown/LICENSE` and it stays with his
-code, which is where it applies. Measured against upstream: 266 of his 267
-lines survive verbatim -- the Chrome discovery, the PDF writer, the HTML
-assembly and the command line are all his.
-
-My additions to that file are structural. Markdown emits a flat list of
-sibling elements, which is enough to style a document and not enough to ask
-"the section the pointer is in" or "the position being read". It now wraps
-each heading-led run in a section and each position in an article, marks date
-lines by matching their text, numbers every unit in reading order for the
-load-in sequence, links the profile handles on the contact line, and splits
-labelled skill entries onto their own lines. All of it is presentation the
-source file should not have to carry.
-
-`src/resume_markdown/resume.md` and `resume.css` are his template files,
-shipped so `resume-markdown init` still works. They are not my resume.
-
 ## Everything else
 
-`build-pdf.py`, `Justfile`, `resume.tokyo-night.css`, `resume.encom.css` and
-`README.md` are my own work and are not derived from anything.
+`build-page.py`, `build-pdf.py`, `Justfile`, `pyproject.toml`, the
+`resume.*.css` themes and `README.md` are my own work under Apache-2.0.
+
+`build-page.py` depends on tree-sitter and tree-sitter-markdown, both MIT,
+installed from PyPI and not distributed here.
