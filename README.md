@@ -49,10 +49,14 @@ the repository: `LEAK_PATTERNS` in the environment, set from a secret in CI,
 or else the first line of a gitignored `.leak-patterns`. With neither, the scan
 fails.
 
-**The PDF still fits two pages.** Read from the page tree's `/Count`, not by
-counting `/Type /Page` occurrences, which over-reports: that method claimed
-three pages for a two page document here and sent an investigation the wrong
-way for an hour.
+**The PDF still fits two pages.** Read from the `/Count` of the root `/Pages`
+node, not by counting `/Type /Page` occurrences, which over-reports: that
+method claimed three pages for a two page document here and sent an
+investigation the wrong way for an hour. The first `/Count` in the file is no
+better, since it can be the bookmark outline's.
+
+**Chrome renders the PDF.** LibreOffice renders the same source at three
+pages, so where it is installed it writes only a `.docx`.
 
 ## Themes
 

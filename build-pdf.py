@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Build resume.md into ATS-friendly .pdf (and .docx where LibreOffice exists).
+"""Build resume.md into an ATS-friendly .pdf with Chrome, and a .docx where
+LibreOffice exists.
 
 Usage:  python3 build.py [source.md] [--name BASENAME] [--outdir DIR] [--runin]
 
@@ -359,7 +360,7 @@ def to_html(md, runin=False, document_class=""):
 # ---- output -----------------------------------------------------------------
 
 def convert(html_path, outdir, fmt):
-    """LibreOffice needs the Writer import filter named explicitly, or it loads
+    """The .docx renderer. LibreOffice needs the Writer import filter named explicitly, or it loads
     HTML into Writer/Web, which has no .docx export filter."""
     subprocess.run(
         ["soffice", "--headless", "--infilter=HTML (StarWriter)",
@@ -410,9 +411,9 @@ def stamp_continued(pdf_path, text="continued..."):
 
 
 def convert_pdf_chrome(html_path, out_path, browser):
-    """PDF fallback when LibreOffice isn't installed. Chrome honours the @page
-    margins in CSS; --no-pdf-header-footer drops the URL and date it would
-    otherwise stamp on every page."""
+    """The PDF renderer. Chrome honours the @page margins in CSS;
+    --no-pdf-header-footer drops the URL and date it would otherwise stamp on
+    every page."""
     subprocess.run(
         [browser, "--headless", "--disable-gpu", "--no-pdf-header-footer",
          f"--print-to-pdf={out_path}", html_path.resolve().as_uri()],
@@ -449,28 +450,27 @@ def main():
     document_class = "cover-letter" if "cover-letter" in src.stem else ""
     staging.write_text(to_html(md, runin, document_class), encoding="utf-8")
 
-    if find("soffice"):
-        for fmt, ext in (("docx:MS Word 2007 XML", "docx"),
-                         ("pdf:writer_pdf_Export", "pdf")):
-            convert(staging, outdir, fmt)
-            print(f"wrote {outdir / (name + '.' + ext)}")
-        staging.unlink()
-        return
-
+    # Chrome renders the PDF, always. It is what the published copy was built
+    # with and what fits two pages; LibreOffice renders the same source at
+    # three, so it writes only the .docx.
     browser = find("google-chrome", "google-chrome-stable", "chromium",
                    "chromium-browser")
     if not browser:
         staging.unlink()
-        sys.exit("error: need soffice or chrome to convert. "
-                 "Install with: sudo apt install libreoffice-writer")
+        sys.exit("error: need Chrome or Chromium to render the PDF.")
 
     pdf = outdir / f"{name}.pdf"
     convert_pdf_chrome(staging, pdf, browser)
     stamp_continued(pdf)
-    staging.unlink()
     print(f"wrote {pdf}")
-    print("note: no soffice, so PDF came from Chrome and no .docx was written.\n"
-          "      Install libreoffice-writer if a .docx is needed for an ATS upload.")
+
+    if find("soffice"):
+        convert(staging, outdir, "docx:MS Word 2007 XML")
+        print(f"wrote {outdir / (name + '.docx')}")
+    else:
+        print("note: no soffice, so no .docx was written. Install\n"
+              "      libreoffice-writer if a .docx is needed for an ATS upload.")
+    staging.unlink()
 
 
 if __name__ == "__main__":

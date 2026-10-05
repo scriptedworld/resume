@@ -88,9 +88,10 @@ leak-scan:
     [ "$fail" = 0 ] && echo "leak-scan: clean"
     exit "$fail"
 
-# The PDF is a two page document. Three means something grew, and the page
-# count is read from the page tree rather than by counting /Type /Page, which
-# over-reports and has already produced one wrong answer here.
+# The PDF is a two page document. Three means something grew. The count is
+# the /Count of the root /Pages node, the one with no /Parent. Counting
+# /Type /Page over-reports, and the first /Count in the file can belong to the
+# bookmark outline instead: both have produced a wrong answer here.
 
 # the PDF still fits two pages
 pages:
@@ -99,8 +100,12 @@ pages:
     n=$(python3 -c "
     import re, sys
     d = open('resume.pdf', 'rb').read()
-    m = re.search(rb'/Count\s+(\d+)', d)
-    sys.stdout.write(m.group(1).decode() if m else '0')
+    n = '0'
+    for m in re.finditer(rb'<<(?:(?!>>).)*?/Type\s*/Pages\b.*?>>', d, re.S):
+        if b'/Parent' not in m.group(0):
+            c = re.search(rb'/Count\s+(\d+)', m.group(0))
+            n = c.group(1).decode() if c else '0'
+    sys.stdout.write(n)
     ")
     echo "resume.pdf: $n pages"
     [ "$n" -le 2 ] || { echo "FAIL: the PDF must fit two pages"; exit 1; }
