@@ -19,7 +19,7 @@ A smile, or the spark of understanding, is what motivates me: either when someon
 ## EXPERIENCE
 
 ### Staff Systems Engineer at ServiceNow
-Aug 2021 – Present · Seattle, WA
+Aug 2021 – Sep 2026 · Seattle, WA
 *Global Cloud Services: Test Engineering, then Pipeline Architecture.*
 
 #### Fleet validation framework
