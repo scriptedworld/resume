@@ -48,8 +48,8 @@ jobs:
       # A build producing a different page than the one committed means the
       # artefact being served is stale. Better to fail here than to serve it.
       #
-      # index.html only. The PDF is NOT byte-reproducible -- Chrome stamps each
-      # one with a fresh document id, so two builds of identical input differ --
+      # index.html only. The PDF is NOT byte-reproducible: Chrome stamps each
+      # one with a fresh document id, so two builds of identical input differ,
       # and asserting it here would make this job permanently red, which is a
       # worse failure than the one it was meant to catch. `just checks` covers
       # the PDF on the things that are actually stable: its contact block and

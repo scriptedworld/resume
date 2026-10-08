@@ -19,8 +19,8 @@ Three stages, so presentation decisions stop happening inside the parser:
 
 The stage that earns its keep is classify(). The old single-pass scanner had
 to fold date lines onto headings, sniff the contact line by position, and
-guess a blurb from surrounding asterisks -- all presentation decisions taken
-while parsing, each one a separate special case. Roles replace all three.
+guess a blurb from surrounding asterisks. All three were presentation
+decisions taken while parsing, each one a separate special case. Roles replace all three.
 """
 
 import html
@@ -53,12 +53,12 @@ body.cover-letter p { margin-bottom: 9pt; }
 body.cover-letter p.contact { margin-bottom: 2pt; }
 ul { margin: 0 0 3pt 0; padding-left: 14pt; }
 /* 2.5pt, raised from 1.5pt on 2026-08-24. Bullets here run long, and at 1.5pt
-   a block of them reads as one grey mass -- the "wordy" complaint from a cold
-   read. The extra point also buys back the page-one fill that keeping the
+   a block of them reads as one grey mass, which was the "wordy" complaint from
+   a cold read. The extra point also buys back the page-one fill that keeping the
    "Also at ServiceNow" heading with its bullets cost. */
 li { margin: 0 0 2.5pt 0; break-inside: avoid; }
 
-/* A paragraph immediately followed by a list is introducing it -- a subgroup
+/* A paragraph immediately followed by a list is introducing it: a subgroup
    heading, or the framing line above a set of bullets. Keep them together.
    The h4 rule below does not cover this: a subgroup heading renders as
    <p><b>…</b></p> rather than an <h4>, so `h4 { break-after: avoid }` never
@@ -67,8 +67,8 @@ li { margin: 0 0 2.5pt 0; break-inside: avoid; }
 p + ul { break-before: avoid; }
 
 /* The mirror case: a paragraph that FOLLOWS a list is starting something new,
-   not continuing the list. Both instances are run-in entries -- "Also at
-   ServiceNow" and the "Earlier:" line -- and with only the default 0 top margin
+   not continuing the list. Both instances are run-in entries, "Also at
+   ServiceNow" and the "Earlier:" line. With only the default 0 top margin
    they butt straight up against the last bullet and read as part of it. */
 ul + p { margin-top: 7pt; }
 
@@ -81,8 +81,8 @@ p.blurb   { margin: 0 0 2pt 0; font-size: 9pt; color: #333; }
    vertical margins do not apply to inline boxes, so the div is the only
    element left that can carry the rhythm. A run-in heading also has to drop
    to the body font size, or the taller line box eats most of what sharing
-   the line saved. CSS `display: run-in` is not an option -- Blink removed
-   it, so inline children of a block wrapper is the working equivalent. */
+   the line saved. CSS `display: run-in` is not an option, because Blink
+   removed it, so inline children of a block wrapper is the working equivalent. */
 .position { margin: 8pt 0 1pt 0; break-inside: avoid; }
 .position > h3, .position > .when { display: inline; margin: 0; }
 .position > .when::before { content: " \\00b7  "; }
@@ -227,7 +227,7 @@ def classify(blocks):
                 # bullet list is structurally a project: Gladesoft and the
                 # pre-2004 line both are. Run its body in, or each costs a
                 # line and a heading margin that the bulleted jobs earn and
-                # these do not. The paragraph must be the whole entry -- a
+                # these do not. The paragraph must be the whole entry: a
                 # paragraph that introduces a bullet list belongs to the
                 # list, not to the heading, and merging it puts a job title
                 # and a framing sentence on the same line.
@@ -262,7 +262,7 @@ def split_tag(text):
 
 def render(roles, runin=False, document_class=""):
     """Default output merges run-in roles at emit time. That is what actually
-    holds two pages -- CSS run-in reclaims the same lines but spends them back
+    holds two pages. CSS run-in reclaims the same lines but spends them back
     on wrapper margins, and it does not survive LibreOffice's HTML import at
     all. Note what flattening does and does not touch: positions keep their
     real <h3>, so the EXPERIENCE structure an ATS parses is unchanged. Only
@@ -308,7 +308,7 @@ def render(roles, runin=False, document_class=""):
                 # Middle dot, not an em-dash: content-rules 4d bans em-dashes in
                 # every outward-facing document, and this joiner was putting them
                 # into the PDF while the markdown and check_content stayed clean.
-                # Not an arrow either -- the page already uses -> for migrations
+                # Not an arrow either: the page already uses -> for migrations
                 # ("Python 3.6 -> 3.12"), and the dot already separates fields in
                 # the position line ("Aug 2021 - Present . Seattle, WA").
                 out.append(f"<p>{lead} · {inline(body)}</p>")

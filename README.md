@@ -8,12 +8,12 @@ My resume, as a web page and as a PDF, built from one markdown file.
 
 ## One source
 
-`resume.md` is the only thing written by hand. It is also a published
-artefact -- the Download Markdown link serves that exact file -- so it carries
-no presentation markup: no hard line breaks, no HTML, no link syntax. Anything
+`resume.md` is the only thing written by hand. The Download Markdown link
+serves that exact file, so it is also a published artefact and carries no
+presentation markup: no hard line breaks, no HTML, no link syntax. Anything
 the page needs in order to look like the page is added by the builder.
 
-That constraint is load-bearing rather than tidiness. Six markdown hard breaks,
+That constraint is load-bearing, not tidiness. Six markdown hard breaks,
 added to stop the skills block rendering as one run-on paragraph, looked free
 and cost the PDF a whole page: what reads as a line break on screen is a forced
 break on paper. The break belongs to the page, so it lives in the builder.
@@ -22,7 +22,7 @@ break on paper. The break belongs to the page, so it lives in the builder.
 
     build-page.py           the page. Parsed with tree-sitter-markdown, whose
                             sections become the page's sections and articles.
-    build-pdf.py            the PDF. Deliberately plain -- no tables, no
+    build-pdf.py            the PDF. Deliberately plain: no tables, no
                             columns, no headers or footers, because applicant
                             tracking systems mangle all three. Two pages.
 
@@ -31,9 +31,9 @@ and one stylesheet trying to be both was worse at each. The page has a caret
 that follows the pointer and a load-in sequence; the PDF has none of that, and
 its print stylesheet exists only so that Ctrl+P on the page is legible.
 
-**The PDF is staged under `.ephemera/`.** `build-pdf.py` writes its own
-`<name>.html` beside its output and removes it on the way out, so pointed at
-the repository root it would delete any HTML file of the same name there.
+The PDF is staged under `.ephemera/`, because `build-pdf.py` writes its own
+`<name>.html` beside its output and removes it on the way out. Pointed at the
+repository root, it would delete any HTML file of the same name there.
 
 ## What `just checks` asserts
 
@@ -42,7 +42,7 @@ from a private one carrying a home town, a phone number and a personal address.
 The public copy carries a metro area and two profile links, and the only thing
 separating them is one edited line. `leak-scan` reads the built files rather
 than trusting that line, and it was verified by seeding a leak and watching it
-fail rather than by watching it pass.
+fail, not by watching it pass.
 
 The patterns it looks for are the private detail itself, so they are not in
 the repository: `LEAK_PATTERNS` in the environment, set from a secret in CI,
@@ -61,7 +61,7 @@ pages, so where it is installed it writes only a `.docx`.
 ## Themes
 
 `resume.css` is a symlink to whichever theme is live, and a symlink rather than
-a copy because the copy went stale within the hour -- the builder reads
+a copy because the copy went stale within the hour: the builder reads
 `resume.css` while the theme was being edited under its own name.
 
     ln -sf resume.encom.css resume.css && just build

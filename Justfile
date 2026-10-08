@@ -1,7 +1,7 @@
 # One resume, two renderers, one command.
 #
-# `resume.md` is the only source. It is also a published artefact -- the
-# Download Markdown link on the page serves this exact file -- so it carries no
+# `resume.md` is the only source. The Download Markdown link on the page serves
+# this exact file, so it is also a published artefact and carries no
 # presentation. Both renderers read it:
 #
 #     build-pdf.py            the ATS document. Plain layout by design: no

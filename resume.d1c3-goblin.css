@@ -1,7 +1,7 @@
 /* D1C3 Goblin, synthwave cut, for the public-facing resume.
  *
- * Same architecture as resume.tokyo-night.css -- the two diff cleanly against
- * each other -- with the palette swapped for the D1C3 Goblin one: hot magenta
+ * Same architecture as resume.tokyo-night.css (the two diff cleanly against
+ * each other), with the palette swapped for the D1C3 Goblin one: hot magenta
  * and electric cyan on a near-black indigo. The neon is on the furniture:
  * section headers sit in a glow pool with a lit edge, the name carries a
  * magenta/cyan chromatic split, the card has a hot top seam. Body text is
@@ -13,8 +13,8 @@
  *
  * Palette is sampled from the D1C3 GOBLIN artwork and is the same set driving
  * the desktop, terminals and editors. Roles are mapped exactly as in the Tokyo
- * Night sheet -- sections, roles, projects, links, bullets, emphasis all keep
- * their jobs -- so switching themes changes the colour and nothing else.
+ * Night sheet (sections, roles, projects, links, bullets, emphasis all keep
+ * their jobs), so switching themes changes the colour and nothing else.
  *
  * This palette runs hotter than Tokyo Night. Two places it is deliberately
  * pulled back: the glow pool under a section header is a touch fainter, and
@@ -231,7 +231,7 @@ article {
 }
 
 /* Body text lifts on the unit being read. A section holding positions is too
- * coarse to light up whole -- EXPERIENCE is one section and six jobs -- so
+ * coarse to light up whole (EXPERIENCE is one section and six jobs), so
  * there the position is the unit. A section with no positions in it is short
  * enough to be one. Headings, labels and links keep their own colours. */
 
@@ -509,8 +509,8 @@ p .row {
  * the screen treatment and stops. Anything more elaborate is a second
  * renderer competing with the one that already does the job properly.
  *
- * Identical to the Tokyo Night sheet's print block. Nothing here is themed --
- * it is ink on paper either way -- so the two stay in step by staying the
+ * Identical to the Tokyo Night sheet's print block. Nothing here is themed,
+ * since it is ink on paper either way, so the two stay in step by staying the
  * same.
  */
 
